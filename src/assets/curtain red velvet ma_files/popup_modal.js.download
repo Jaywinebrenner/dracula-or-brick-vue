@@ -1,0 +1,85 @@
+function PopupModal() {
+    this.licenseProductID = 0;
+}
+PopupModal.prototype.init = function(){
+
+    this.initEvent();
+}
+PopupModal.prototype.initEvent = function(){
+    $(".ModalContainer .modal_close").click(function(){
+        popupModal.showModal(false, $(this).data("modal"));
+    });
+    $("body").on('click', '.btnUpgradeLincense', function(e) {
+        popupModal.showModal(true, "licenseModal");
+        popupModal.licenseProductID = $(this).data("assetid");
+        $("#raLicenseStandard").prop("checked", true);
+    });
+    $("#popup_modal_mask").click(function(){
+        popupModal.showModal(false, '');
+    });
+
+    $("#licenseModal .btnAddToCart").click(function(){
+        popupModal.licenseAddToCart();
+    });
+
+    $("#licenseModal .license_item .licenseLabel").click(function(){
+        $("#licenseModal .license_item .licenseLabel").removeClass("checked");
+        $(this).addClass("checked");
+    });
+}
+
+PopupModal.prototype.licenseAddToCart = function(){
+    var licenseID = $("#licenseModal .content .raLicenseType:checked").data("id");
+    var addID = this.licenseProductID;
+    //if(licenseID!="0"){
+    addID = "1_" + addID + "_U_" + licenseID;
+    //}
+    window.location.href = add_cart_url + "?AddID=" + addID;
+}
+
+PopupModal.prototype.showModal = function(show, modalID){
+    if(show){
+        $("#popup_modal_mask").show();
+        this.centerPopupModal(modalID, false);
+        $("#" + modalID).show();
+    }
+    else{
+        $("#popup_modal_mask").hide();
+        if(modalID==''){
+            $(".ModalContainer .modal_content").hide();
+        }
+        else{
+            $("#" + modalID).hide();
+        }
+    }
+}
+PopupModal.prototype.centerPopupModal = function(modalID, blCenterTop){
+    var window_width = $("body").width();
+    var window_height = $("body").height();
+    var modal = $("#" + modalID);
+    var top = (window_height - modal.height()) / 2;
+    var left = (window_width - modal.width()) / 2;
+    if(left<0){
+        left = 0;
+    }
+    if(blCenterTop===false){
+        modal.css({
+            "left": left
+        });
+    }
+    else{
+        if(top<0){
+            top = 0;
+        }
+        modal.css({
+            "top": top,
+            "left": left
+        });
+    }
+}
+
+var popupModal;
+$(document).ready(function() {
+    popupModal = new PopupModal()
+    popupModal.init();
+});

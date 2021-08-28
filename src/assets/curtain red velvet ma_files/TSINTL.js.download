@@ -1,0 +1,9 @@
+function _TS(msg) {
+	// replace %1, %2 and etc. with actual arguments from the arguments list  
+	var a = arguments;
+	var result = msg.replace(/%\d+/g,function(matchedStr){
+		var n = Number(matchedStr.substring(1));
+		return a[n];
+	});
+	return result;
+}

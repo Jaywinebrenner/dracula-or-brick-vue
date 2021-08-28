@@ -1,18 +1,47 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+      <Landing  
+        v-if="navigation === 'Landing'"
+        :navigate='navigate'
+      />
+      <div v-if="navigation === 'Landing'" class="landing-pics">
+        <img src="./assets/discount-dracula.png">
+        <img src="./assets/brick.png">
+      </div>
+
+      
+      <Game
+        v-if="navigation === 'Game'"
+      />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Landing from './components/Landing.vue'
+import Game from './components/Game.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    Landing,
+    Game
+  },
+  props: {
+
+  },
+  data() {
+    return {
+      navigation: "Landing"
+    }
+  },
+  methods: {
+      // openAccordian() {
+      //     this.isActive = !this.isActive;
+      // }
+      navigate(view) {
+        this.navigation = view;
+      }
+  },
 }
 </script>
 
@@ -23,6 +52,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 20px;
 }
 </style>
