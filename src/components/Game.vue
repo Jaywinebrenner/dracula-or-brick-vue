@@ -1,5 +1,6 @@
 <template>
   <div id="game">
+      <h6>Get 5 correct without failure and you win big!</h6>
 
       <div v-if="step === 'one'" class='step-one'>
           <p>What is behind this curtain?</p>
@@ -8,6 +9,9 @@
             <p>or</p>
             <h1 @click="pickBrick()"> Brick?</h1>
       </div>
+
+        <img v-if="step === 'dracula'" src="../assets/discount-dracula.png">
+        <img v-if="step === 'brick'" src="../assets/brick.png">
 
   </div>
 </template>
@@ -32,7 +36,17 @@ export default {
   methods: {
 
       pickDracula() {
-          this.step = "two"
+        //   this.step = "two";
+          let result = Math.floor(Math.random()*10 +1)
+          console.log(result)
+          if(result <= 5) {
+              console.log("You Won!")
+              this.step = "dracula"
+          }
+          if(result > 5){
+              console.log("You Lose!");
+              this.step = "brick"
+          }
       },
       pickBrick() {
           this.step = "two"
@@ -73,7 +87,7 @@ export default {
 }
 
 .curtain {
-
+        width: 50%;
 }
 
 </style>

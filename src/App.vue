@@ -4,10 +4,10 @@
         v-if="navigation === 'Landing'"
         :navigate='navigate'
       />
-      <div v-if="navigation === 'Landing'" class="landing-pics">
+      <!-- <div v-if="navigation === 'Landing'" class="landing-pics">
         <img src="./assets/discount-dracula.png">
         <img src="./assets/brick.png">
-      </div>
+      </div> -->
 
       
       <Game
