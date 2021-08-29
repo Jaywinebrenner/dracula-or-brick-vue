@@ -1,5 +1,7 @@
 # dracula-or-brick
 
+# Pick one: Dracula or Brick. Maybe you are right!
+
 ## Project setup
 ```
 npm install
@@ -22,3 +24,7 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+
+dracula-or-brick

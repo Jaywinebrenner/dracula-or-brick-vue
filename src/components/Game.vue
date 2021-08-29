@@ -1,7 +1,7 @@
 <template>
   <div id="game">
       <div class="nav-wrapper" v-if="step !== 'three'">
-            <h6 class="instructions">You get 5 chances to guess 5 correct!</h6>
+            <h6 class="instructions">You get 3 chances to guess 3 correct!</h6>
             <div class="nav">
                 <h3 class="points">POINTS: {{points}}      </h3>
                 <h3 class="points">BAD GUESSES: {{guessesLeft}}      </h3>
@@ -93,7 +93,7 @@ export default {
 
         }
 
-        if(this.points === 5){
+        if(this.points === 3){
             console.log("YOU WON")
             this.playerWon = true;
             this.step = 'three';
@@ -106,7 +106,7 @@ export default {
             this.points= 0;
             this.guessesLeft= 0;
         }
-        if(this.guessesLeft === 5){
+        if(this.guessesLeft === 3){
             console.log("YOU LOST")
             this.playerWon = false;
             this.step = 'three';
