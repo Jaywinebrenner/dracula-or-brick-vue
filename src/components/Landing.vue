@@ -1,5 +1,6 @@
 <template>
   <div id="landing">
+      <h4>Lousy Games presents:</h4>
       <p>Time to play</p>
       <h1>Dracula?</h1>
       <h6>or</h6>
@@ -55,6 +56,7 @@ export default {
 
 .start-button {
     border: 1px black solid;
+    background-color: rgb(212, 207, 207);
     width: 200px;
     display: inline-block;
     padding: 20px;
@@ -67,6 +69,29 @@ export default {
     background-color: black;
     cursor: pointer;
     color: white;
+}
+
+@media only screen and (max-width: 980px) {
+#landing h1 {
+    font-size: 7.5rem;
+    }
+}
+
+@media only screen and (max-width: 730px) {
+#landing h1 {
+    font-size: 6rem;
+    }
+}
+
+@media only screen and (max-width: 580px) {
+#landing h1 {
+    font-size: 5rem;
+    }
+}
+@media only screen and (max-width: 480px) {
+#landing h1 {
+    font-size: 4rem;
+    }
 }
 
 </style>

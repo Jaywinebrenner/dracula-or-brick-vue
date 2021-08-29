@@ -1,17 +1,39 @@
 <template>
   <div id="game">
-      <h6>Get 5 correct without failure and you win big!</h6>
-
-      <div v-if="step === 'one'" class='step-one'>
-          <p>What is behind this curtain?</p>
-            <img class="curtain" src="../assets/curtain.jpg">
-            <h1 @click="pickDracula()">Dracula?</h1>
-            <p>or</p>
-            <h1 @click="pickBrick()"> Brick?</h1>
+      <div class="nav-wrapper" v-if="step !== 'three'">
+            <h6 class="instructions">You get 5 chances to guess 5 correct!</h6>
+            <div class="nav">
+                <h3 class="points">POINTS: {{points}}      </h3>
+                <h3 class="points">BAD GUESSES: {{guessesLeft}}      </h3>
+                <h3 class="points">YOUR GUESS: <img class="dracula-little little" v-if="guess === 'dracula'" src="../assets/discount-dracula.png"><img class="brick-little little" v-if="guess === 'brick'" src="../assets/brick.png"></h3>
+            </div>
       </div>
 
-        <img v-if="step === 'dracula'" src="../assets/discount-dracula.png">
-        <img v-if="step === 'brick'" src="../assets/brick.png">
+      <div v-if="step === 'one'" class='step-one'>
+          <p>What you think is in the box?</p>
+            <img class="box" src="../assets/box.png">
+            <h1 @click="choose('dracula')">Dracula?</h1>
+            <p>or</p>
+            <h1 @click="choose('brick')"> Brick?</h1>
+      </div>
+        <div v-if="step === 'two'">
+            <h2 v-if="isRight">RIGHT!</h2>
+            <h2 v-else>WRONG!</h2>
+            <div @click="continueGame()" class="continue-game-button">Continue</div>
+            <img class="dracula-image" v-if="correctAnswer === 'dracula'" src="../assets/discount-dracula.png">
+            <img class="brick-image" v-if="correctAnswer === 'brick'" src="../assets/brick.png">
+        </div>
+
+        <div class="game-over-screen" v-if="step === 'three'">
+            <h1 v-if="playerWon" class="game-over-text">YOU WON!!!</h1>
+            <h1 v-if="!playerWon" class="game-over-text">YOU LOST!</h1>
+            <div @click="playAgain()" class="restart-button">Play Again</div>
+        </div>
+
+        <div v-if="step === 'Loading'" class="loading-screen">
+
+             <img class="loading-icon" src="../assets/hug.gif">
+        </div>
 
   </div>
 </template>
@@ -30,26 +52,93 @@ export default {
   },
   data() {
     return {
-        step: "one"
+        step: "one",
+        isDraculaVisible: false,
+        isBrickVisible: false,
+        isRight: null,
+        isWrong: null,
+        correctAnswer: null,
+        guess: null,
+        points: 0,
+        guessesLeft: 0,
+        playerWon: null,
+        isLoading: false
     }
   },
   methods: {
 
-      pickDracula() {
-        //   this.step = "two";
+      choose(draculaOrBrick) {
+          this.loadScreenActive()
+        //  this.step = "two";
+        console.log("step in CHOSE", this.step)
+         this.guess = draculaOrBrick;
           let result = Math.floor(Math.random()*10 +1)
-          console.log(result)
-          if(result <= 5) {
-              console.log("You Won!")
-              this.step = "dracula"
+
+        if(result <= 5) {
+            this.correctAnswer = 'dracula'
+          } else {
+              this.correctAnswer = 'brick'
           }
-          if(result > 5){
-              console.log("You Lose!");
-              this.step = "brick"
-          }
+
+        if(draculaOrBrick === 'dracula' && this.correctAnswer === 'dracula' || draculaOrBrick === 'brick' && this.correctAnswer === 'brick'){
+            console.log("CORRECT ANSWER: ", this.correctAnswer)
+            console.log("PLAYER GUESS: ", draculaOrBrick)
+            this.isRight = true;
+            this.points = this.points + 1;
+        } else {
+             console.log("CORRECT ANSWER: ", this.correctAnswer)
+             console.log("PLAYER GUESS: ", draculaOrBrick)
+             this.isRight = false;
+            this.guessesLeft = this.guessesLeft + 1;
+
+        }
+
+        if(this.points === 5){
+            console.log("YOU WON")
+            this.playerWon = true;
+            this.step = 'three';
+            this.isDraculaVisible= false;
+            this.isBrickVisible= false;
+            this.isRight= null;
+            this.isWrong= null;
+            this.correctAnswer= null;
+            this.guess= null;
+            this.points= 0;
+            this.guessesLeft= 0;
+        }
+        if(this.guessesLeft === 5){
+            console.log("YOU LOST")
+            this.playerWon = false;
+            this.step = 'three';
+        }
+
+
       },
-      pickBrick() {
-          this.step = "two"
+      continueGame(){
+        this.step = "one";
+        this.isDraculaVisible = false;
+        this.isBrickVisible = false;
+        this.guess = null;
+        this.correctAnswer = null;
+
+      },
+      playAgain() {
+        this.navigate("Landing")
+        this.isDraculaVisible = false;
+        this.isBrickVisible = false;
+        this.guess = null;
+        this.correctAnswer = null;
+      },
+      loadScreenActive() {
+          console.log("LOAD")
+          this.step = "Loading";
+        setTimeout(function () {
+            this.step = 'two';
+            }.bind(this), 750)
+
+
+       
+ 
       }
 
   },
@@ -57,6 +146,14 @@ export default {
 </script>
 
 <style>
+
+.points {
+    display: inline-block;
+}
+
+.instructions {
+ display: inline-block;
+}
 
 #game h1 {
     font-family: 'Bowlby One SC', cursive;
@@ -67,13 +164,33 @@ export default {
     line-height: 1;
     cursor: pointer;
 }
+#game h2 {
+    font-family: 'Bowlby One SC', cursive;
+    color: #8a0303;
+    padding: 0;
+    margin: 0;
+    font-size: 8rem;
+}
+
+#game h3 {
+    font-family: 'Bowlby One SC', cursive;
+    color: #8a0303;
+    padding: 0;
+    margin: 0;
+    font-size: 2.5rem;
+    margin-right: 20px;
+}
+
+#game h6 {
+    margin: 0;
+    padding: 0;
+}
 
 #game h1:hover {
     font-family: 'Bowlby One SC', cursive;
     color: #5c0707;
     padding: 0;
     margin: 0;
-    font-size: 6rem;
     line-height: 1;
     cursor: pointer;
     transition: .3s;
@@ -83,11 +200,120 @@ export default {
     font-family: 'Bubblegum Sans', cursive;
     font-size: 2rem;
     margin: 0;
+}
+.continue-game-button {
+    border: 1px black solid;
+    width: 200px;
+    display: block;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 3px;
+    margin-bottom: 30px;
+}
+
+.continue-game-button:hover {
+    transition: .4s;
+    background-color: black;
+    cursor: pointer;
+    color: white;
+}
+
+.game-over-text {
+    font-size: 8rem;
 
 }
 
-.curtain {
-        width: 50%;
+.dracula-image {
+    height: 400px;
 }
 
+.box {
+    height: 400px;
+}
+
+.dracula-little {
+    width: 20px;
+}
+.brick-little {
+    width: 60px;
+}
+
+.game-over-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.restart-button {
+    border: 1px black solid;
+    width: 200px;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 3px;
+    margin-top: 50px;
+}
+
+.restart-button:hover {
+    transition: .4s;
+    background-color: black;
+    cursor: pointer;
+    color: white;
+}
+
+.loading-icon {
+    width: 30%;
+    margin-top: 100px;
+}
+
+@media only screen and (max-width: 1200px) {
+    #game h3 {
+        font-size: 2rem;
+        }
+    }
+
+@media only screen and (max-width: 970px) {
+    #game h3 {
+        font-size: 1.5rem;
+        }
+    }
+
+@media only screen and (max-width: 750px) {
+    #game h3 {
+        display: block;
+        }
+        .box {
+            height: 200px;
+        }
+        .little {
+            position: absolute;
+        }
+        .brick-image {
+            width: 20rem;;
+        }
+        .dracula-image {
+            height: 15rem;;
+        }
+    }
+
+@media only screen and (max-width: 970px) {
+    #game h3 {
+        font-size: 1.5rem;
+    }
+}   
+
+@media only screen and (max-width: 600px) {
+    #game h1 {
+        font-size: 4rem;
+        }
+    #game h1:hover {
+        font-size: 4rem;
+    }
+    #game h2 {
+        font-size: 4rem;
+        }
+    #game h2:hover {
+        font-size: 4rem;
+    }
+}
 </style>

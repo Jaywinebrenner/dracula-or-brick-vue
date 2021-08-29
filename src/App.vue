@@ -12,6 +12,7 @@
       
       <Game
         v-if="navigation === 'Game'"
+        :navigate='navigate'
       />
   </div>
 </template>
@@ -53,5 +54,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 20px;
+}
+body {
+  background-color: lightgray;
 }
 </style>
