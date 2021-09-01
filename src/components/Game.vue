@@ -62,7 +62,8 @@ export default {
         points: 0,
         guessesLeft: 0,
         playerWon: null,
-        isLoading: false
+        isLoading: false,
+        isGameOver: false
     }
   },
   methods: {
@@ -92,7 +93,28 @@ export default {
             this.guessesLeft = this.guessesLeft + 1;
 
         }
+        this.winCheck()
 
+        // if(this.points === 3){
+        //     console.log("YOU WON")
+        //     this.playerWon = true;
+        //     this.step = 'three';
+        //     this.isDraculaVisible= false;
+        //     this.isBrickVisible= false;
+        //     this.isRight= null;
+        //     this.isWrong= null;
+        //     this.correctAnswer= null;
+        //     this.guess= null;
+        //     this.points= 0;
+        //     this.guessesLeft= 0;
+        // }
+        // if(this.guessesLeft === 3){
+        //     console.log("YOU LOST")
+        //     this.playerWon = false;
+        //     this.step = 'three';
+        // }
+      },
+      winCheck(){
         if(this.points === 3){
             console.log("YOU WON")
             this.playerWon = true;
@@ -105,14 +127,14 @@ export default {
             this.guess= null;
             this.points= 0;
             this.guessesLeft= 0;
+            this.isGameOver = true;
         }
         if(this.guessesLeft === 3){
             console.log("YOU LOST")
             this.playerWon = false;
             this.step = 'three';
+            this.isGameOver = true;
         }
-
-
       },
       continueGame(){
         this.step = "one";
@@ -130,15 +152,14 @@ export default {
         this.correctAnswer = null;
       },
       loadScreenActive() {
+         
           console.log("LOAD")
           this.step = "Loading";
         setTimeout(function () {
-            this.step = 'two';
+            if(!this.isGameOver) {
+                this.step = 'two';
+            }
             }.bind(this), 750)
-
-
-       
- 
       }
 
   },
